@@ -41,8 +41,6 @@ jobs:
           ls /usr/share/miniconda/envs/test/lib/python3.7/site-packages
           echo "AND"
           ls /usr/share/miniconda/envs/test/lib/python3.7
-          echo "CHECKING 3.8"
-          ls /usr/share/miniconda/envs/test/lib/python3.8/dist-packages
       - name: Install icub-models
         run: |
           git clone https://github.com/robotology/icub-models
@@ -61,6 +59,6 @@ jobs:
           ls ${GITHUB_WORKSPACE}
           cd ${GITHUB_WORKSPACE}
           export GAZEBO_MODEL_PATH=${GAZEBO_MODEL_PATH}:/home/runner/install/share/iCub/robots
-          export PYTHONPATH=/usr/share/miniconda/envs/test/lib/python3.8/dist-packages
+          export PYTHONPATH=/usr/share/miniconda/envs/test/lib/python3.7/site-packages
           blender --python-use-system-env -b -P "./script/urdfToBlender.py" -- --urdf_filename foo.urdf --blend_filename ./rigs/bar.blend
           ls
