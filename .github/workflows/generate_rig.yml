@@ -34,12 +34,12 @@ jobs:
           # Install Blender
           sudo apt-get update
           sudo apt-get install blender
-          echo "CHECKING bin"
-          ls /usr/share/miniconda/envs/test/bin
-          echo "CHECKING lib"
-          ls /usr/share/miniconda/envs/test/lib
-          echo "CHECKING Lib"
-          ls /usr/share/miniconda/envs/test/Lib
+          echo "CHECKING 3.7"
+          ls /usr/share/miniconda/envs/test/lib/python3.7
+          echo "CHECKING 3.8"
+          ls /usr/share/miniconda/envs/test/lib/python3.8
+          echo "CHECKING 3.9"
+          ls /usr/share/miniconda/envs/test/lib/python3.9
 
       - name: Install icub-models
         run: |
