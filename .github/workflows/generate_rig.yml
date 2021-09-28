@@ -17,8 +17,6 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
 
       - uses: conda-incubator/setup-miniconda@v2
         with:
@@ -33,15 +31,33 @@ jobs:
           conda config --remove channels defaults
           # Actual dependencies
           mamba install yarp idyntree gazebo-yarp-plugins
-          echo "WHERE IS YARP"
-          which yarp
           # Install Blender
           sudo apt-get update
           sudo apt-get install blender
+          echo "CHECKING bin"
+          ls /usr/share/miniconda/envs/test/bin
+          echo "CHECKING lib"
+          ls /usr/share/miniconda/envs/test/lib
+          echo "CHECKING Lib"
+          ls /usr/share/miniconda/envs/test/Lib
+
+      - name: Install icub-models
+        run: |
+          git clone https://github.com/robotology/icub-models
+          cd icub-models
+          mkdir build && cd build
+          cmake -DCMAKE_INSTALL_PREFIX=/home/runner/install ..
+          make install
+
+
+
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
 
       - name: Run conversion script
         run: |
           ls ${GITHUB_WORKSPACE}
           cd ${GITHUB_WORKSPACE}
-          blender -b -P "./script/urdfToBlender.py" -- --urdf_filename foo.urdf --blend_filename ./bar.blend
+          export GAZEBO_MODEL_PATH=${GAZEBO_MODEL_PATH}:/home/runner/install/share/iCub/robots
+          blender --python-use-system-env -b -P "./script/urdfToBlender.py" -- --urdf_filename foo.urdf --blend_filename ./rigs/bar.blend
           ls
