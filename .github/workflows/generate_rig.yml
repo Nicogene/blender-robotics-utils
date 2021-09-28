@@ -40,8 +40,6 @@ jobs:
           echo "CHECKING 3.8"
           ls /usr/share/miniconda/envs/test/lib/python3.8/
           echo "AND"
-          ls /usr/share/miniconda/envs/test/lib/python3.8/dist-packages
-          echo "AND"
           ls /usr/share/miniconda/envs/test/lib/python3.8/site-packages
       - name: Install icub-models
         run: |
