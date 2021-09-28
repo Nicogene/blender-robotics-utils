@@ -34,7 +34,8 @@ jobs:
           # Actual dependencies
           mamba install yarp idyntree gazebo-yarp-plugins
           # Install Blender
-          apt install blender
+          sudo apt-get update
+          sudo apt-get install blender
 
       - name: Run conversion script
         run: |
