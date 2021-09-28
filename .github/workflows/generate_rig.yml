@@ -31,7 +31,7 @@ jobs:
         run: |
           # Workaround for https://github.com/conda-incubator/setup-miniconda/issues/186
           conda config --remove channels defaults
-          conda create blenderenv
+          conda create -n blenderenv
           conda activate blenderenv
           # Actual dependencies
           mamba install yarp idyntree gazebo-yarp-plugins
