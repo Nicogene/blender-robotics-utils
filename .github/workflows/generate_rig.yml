@@ -35,12 +35,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install blender
 
-      - name: Check bindings
-        run: |
-          echo "CHECKING 3.8"
-          ls /usr/share/miniconda/envs/test/lib/python3.8/
-          echo "AND"
-          ls /usr/share/miniconda/envs/test/lib/python3.8/site-packages
       - name: Install icub-models
         run: |
           git clone https://github.com/robotology/icub-models
@@ -48,8 +42,6 @@ jobs:
           mkdir build && cd build
           cmake -DCMAKE_INSTALL_PREFIX=/home/runner/install ..
           make install
-
-
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
@@ -60,5 +52,5 @@ jobs:
           cd ${GITHUB_WORKSPACE}
           export GAZEBO_MODEL_PATH=${GAZEBO_MODEL_PATH}:/home/runner/install/share/iCub/robots
           export PYTHONPATH=/usr/share/miniconda/envs/test/lib/python3.8/site-packages
-          blender --python-use-system-env -b -P "./script/urdfToBlender.py" -- --urdf_filename foo.urdf --blend_filename ./rigs/bar.blend
-          ls
+          blender --python-use-system-env -b -P "./script/urdfToBlender.py" -- --urdf_filename "/home/runner/install/share/iCub/robots/iCubGazeboV2_5/model.urdf --blend_filename ./rigs/bar.blend
+          ll ./rigs
