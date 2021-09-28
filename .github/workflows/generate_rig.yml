@@ -11,7 +11,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  generate_rig:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -31,14 +31,14 @@ jobs:
         run: |
           # Workaround for https://github.com/conda-incubator/setup-miniconda/issues/186
           conda config --remove channels defaults
-          conda create -n blenderenv
-          conda activate blenderenv
           # Actual dependencies
           mamba install yarp idyntree gazebo-yarp-plugins
-          # Check variables
-          echo "DEACTIVATING PROFILE"
-          conda deactivate
-          echo "ACTIVATING PROFILE"
-          conda activate blenderenv
-          echo $PYTHONPATH
-          echo $GAZEBO_MODEL_PATH
+          # Install Blender
+          apt install blender
+
+      - name: Run conversion script
+        run: |
+          ls ${GITHUB_WORKSPACE}
+          cd ${GITHUB_WORKSPACE}
+          blender -b -P "./script/urdfToBlender.py" --urdf_filename foo.urdf --blend_filename ./bar.blend
+          ls
