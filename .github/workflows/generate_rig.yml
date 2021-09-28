@@ -34,9 +34,13 @@ jobs:
           # Install Blender
           sudo apt-get update
           sudo apt-get install blender
+
+      - name: Check bindings
+        run: |
+          echo "CHECKING 3.7"
+          ls /usr/share/miniconda/envs/test/lib/python3.7/site-packages
           echo "CHECKING 3.8"
           ls /usr/share/miniconda/envs/test/lib/python3.8/dist-packages
-
       - name: Install icub-models
         run: |
           git clone https://github.com/robotology/icub-models
