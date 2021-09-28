@@ -19,13 +19,13 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      
+
       - uses: conda-incubator/setup-miniconda@v2
         with:
           mamba-version: "*"
           channels: conda-forge,robotology
           channel-priority: true
-          
+
       - name: Dependencies
         shell: bash -l {0}
         run: |
@@ -36,5 +36,9 @@ jobs:
           # Actual dependencies
           mamba install yarp idyntree gazebo-yarp-plugins
           # Check variables
+          echo "DEACTIVATING PROFILE"
+          conda deactivate
+          echo "ACTIVATING PROFILE"
+          conda activate blenderenv
           echo $PYTHONPATH
           echo $GAZEBO_MODEL_PATH
