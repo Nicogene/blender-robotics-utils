@@ -30,17 +30,19 @@ jobs:
           # Workaround for https://github.com/conda-incubator/setup-miniconda/issues/186
           conda config --remove channels defaults
           # Actual dependencies
-          mamba install python=3.7 yarp idyntree
+          mamba install python=3.8 yarp idyntree
           # Install Blender
           sudo apt-get update
           sudo apt-get install blender
 
       - name: Check bindings
         run: |
-          echo "CHECKING 3.7"
-          ls /usr/share/miniconda/envs/test/lib/python3.7/site-packages
+          echo "CHECKING 3.8"
+          ls /usr/share/miniconda/envs/test/lib/python3.8/
           echo "AND"
-          ls /usr/share/miniconda/envs/test/lib/python3.7
+          ls /usr/share/miniconda/envs/test/lib/python3.8/dist-packages
+          echo "AND"
+          ls /usr/share/miniconda/envs/test/lib/python3.8/site-packages
       - name: Install icub-models
         run: |
           git clone https://github.com/robotology/icub-models
@@ -59,6 +61,6 @@ jobs:
           ls ${GITHUB_WORKSPACE}
           cd ${GITHUB_WORKSPACE}
           export GAZEBO_MODEL_PATH=${GAZEBO_MODEL_PATH}:/home/runner/install/share/iCub/robots
-          export PYTHONPATH=/usr/share/miniconda/envs/test/lib/python3.7/site-packages
+          export PYTHONPATH=/usr/share/miniconda/envs/test/lib/python3.8/site-packages
           blender --python-use-system-env -b -P "./script/urdfToBlender.py" -- --urdf_filename foo.urdf --blend_filename ./rigs/bar.blend
           ls
