@@ -50,7 +50,7 @@ jobs:
         run: |
           ls ${GITHUB_WORKSPACE}
           cd ${GITHUB_WORKSPACE}
-          export GAZEBO_MODEL_PATH=${GAZEBO_MODEL_PATH}:/home/runner/install/share/iCub/robots
+          export GAZEBO_MODEL_PATH=${GAZEBO_MODEL_PATH}:/home/runner/install/share/iCub/robots:/home/runner/install/share
           export PYTHONPATH=/usr/share/miniconda/envs/test/lib/python3.8/site-packages
           blender --python-use-system-env -b -P "./script/urdfToBlender.py" -- --urdf_filename /home/runner/install/share/iCub/robots/iCubGazeboV2_5/model.urdf --blend_filename ./rigs/bar.blend
           ll ./rigs
