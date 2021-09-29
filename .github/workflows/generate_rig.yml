@@ -56,7 +56,8 @@ jobs:
           for _model in "${models_list[@]}"
           do
             echo "For loop!"
-            _version=echo $_model | grep -o -P '(?<=iCubGazeboV).*(?=/model.urdf)'
+            echo $_model
+            _version=echo $_model | grep -o -P '(?<=iCubGazeboV).*(?=/model)'
             echo $_version
             blender --python-use-system-env -b -P "./script/urdfToBlender.py" -- --urdf_filename /home/runner/install/share/iCub/robots/iCubGazeboV${_version}/model.urdf --blend_filename ./rigs/iCubBlenderV${_version}.blend
           done
