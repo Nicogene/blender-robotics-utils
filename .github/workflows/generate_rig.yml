@@ -53,10 +53,11 @@ jobs:
           export PYTHONPATH=/usr/share/miniconda/envs/test/lib/python3.8/site-packages
           models_list="\"$(echo ${{ github.event.client_payload.models_list }} > temp.tmp && sed -i 's/ /" "/g' temp.tmp && cat temp.tmp)\""
           models_list=( $models_list )
-          iter_parsed_list=0
           for _model in "${models_list[@]}"
           do
+            echo "For loop!"
             _version=echo $_model | grep -o -P '(?<=iCubGazeboV).*(?=/model.urdf)'
+            echo $_version
             blender --python-use-system-env -b -P "./script/urdfToBlender.py" -- --urdf_filename /home/runner/install/share/iCub/robots/iCubGazeboV${_version}/model.urdf --blend_filename ./rigs/iCubBlenderV${_version}.blend
           done
           ls -la ./rigs
