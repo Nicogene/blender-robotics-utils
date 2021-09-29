@@ -48,9 +48,16 @@ jobs:
 
       - name: Run conversion script
         run: |
-          ls ${GITHUB_WORKSPACE}
           cd ${GITHUB_WORKSPACE}
           export GAZEBO_MODEL_PATH=${GAZEBO_MODEL_PATH}:/home/runner/install/share/iCub/robots:/home/runner/install/share
           export PYTHONPATH=/usr/share/miniconda/envs/test/lib/python3.8/site-packages
-          blender --python-use-system-env -b -P "./script/urdfToBlender.py" -- --urdf_filename /home/runner/install/share/iCub/robots/iCubGazeboV2_5/model.urdf --blend_filename ./rigs/bar.blend
+          models_list="\"$(echo ${{ github.event.client_payload.models_list }} > temp.tmp && sed -i 's/ /" "/g' temp.tmp && cat temp.tmp)\""
+          models_list=( $models_list )
+          iter_parsed_list=0
+          for _model in "${models_list[@]}"
+          do
+            _version=echo $_model | grep -o -P '(?<=iCubGazeboV).*(?=/model.urdf)'
+            blender --python-use-system-env -b -P "./script/urdfToBlender.py" -- --urdf_filename /home/runner/install/share/iCub/robots/iCubGazeboV${_version}/model.urdf --blend_filename ./rigs/iCubBlenderV${_version}.blend
+          done
           ls -la ./rigs
+          git status
