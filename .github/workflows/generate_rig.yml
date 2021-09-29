@@ -36,12 +36,15 @@ jobs:
           sudo apt-get install blender
 
       - name: Install icub-models
+        id: get_icub-models
         run: |
           git clone https://github.com/robotology/icub-models
           cd icub-models
+          commit_hash=$(git rev-parse HEAD)
           mkdir build && cd build
           cmake -DCMAKE_INSTALL_PREFIX=/home/runner/install ..
           make install
+          echo "::set-output name=commit_hash::${commit_hash}"
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
@@ -52,6 +55,7 @@ jobs:
           export GAZEBO_MODEL_PATH=${GAZEBO_MODEL_PATH}:/home/runner/install/share/iCub/robots:/home/runner/install/share
           export PYTHONPATH=/usr/share/miniconda/envs/test/lib/python3.8/site-packages
           models_list="\"$(echo ${{ github.event.client_payload.models_list }} > temp.tmp && sed -i 's/ /" "/g' temp.tmp && cat temp.tmp)\""
+          rm temp.tmp
           models_list=( $models_list )
           for _model in "${models_list[@]}"
           do
@@ -62,4 +66,15 @@ jobs:
             blender --python-use-system-env -b -P "./script/urdfToBlender.py" -- --urdf_filename /home/runner/install/share/iCub/robots/iCubGazeboV${_version}/model.urdf --blend_filename ./rigs/iCubBlenderV${_version}.blend
           done
           ls -la ./rigs
+
+      - name: Commit and push changes
+        run: |
+          cd ${GITHUB_WORKSPACE}
           git status
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git commit -m "rigs: automatic update" -m "icub-models commit: ${{ steps.get_icub-models.outputs.commit_hash }}"
+          git fetch origin
+          git rebase origin/master
+          git push origin master
